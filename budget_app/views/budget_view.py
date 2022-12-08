@@ -1,5 +1,5 @@
 import sys
-import logging
+import toml
 
 from PyQt6 import QtGui, QtCore
 from PyQt6.QtCore import Qt
@@ -13,7 +13,8 @@ from PyQt6.QtWidgets import (
     QWidget,
     QFileDialog,
 )
-from functools import partial
+
+config = toml.load('config.toml')['paths']
 
 
 class BudgetView(QFormLayout):
@@ -142,10 +143,10 @@ class BudgetView(QFormLayout):
                 "Subscription": ["Other"],
             }
 
-        if self.categoryBox.currentText() != '':
+        if self.categoryBox.currentText() != "":
             self.groupingBox.addItems(
-            forecast_groupings[self.categoryBox.currentText()]
-        )
+                forecast_groupings[self.categoryBox.currentText()]
+            )
 
     def pressed_submit(self):
         """
@@ -165,16 +166,20 @@ class BudgetView(QFormLayout):
         # Get the values from the form
         self.label.setText("You've pressed submit")
 
-    def open (self):
-        filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '.')
+    def open(self):
+        filename = QtGui.QFileDialog.getOpenFileName(self, "Open File", ".")
         print(f"Path to file : {filename}")
 
     def browse_data1(self):
-        data_path=QFileDialog.getOpenFileName(None,'Open File',"/Users/jscoran/GUI",'*',)
+        data_path = QFileDialog.getOpenFileName(
+            None,
+            "Open File",
+            config["bulk"],
+            "*",
+        )
         # Open File and upload to database
         # with open('data_path', 'r') as handle:
         #     _pickle.dump(data_path,handle,protocol=_pickle.HIGHEST_PROTOCOL)
-
 
     def _createForm(self):
         self.label = QLabel("Unsubmitted")
@@ -211,9 +216,7 @@ class BudgetView(QFormLayout):
         self.addRow(self.uploadButton)
         self.uploadButton.clicked.connect(self.browse_data1)
 
-        self.addRow(QPushButton("Submit", clicked= lambda: self.pressed_submit()))
-
-
+        self.addRow(QPushButton("Submit", clicked=lambda: self.pressed_submit()))
 
     def _createType(self):
 

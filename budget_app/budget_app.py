@@ -23,7 +23,11 @@ ERROR_MSG = "ERROR"
 
 class BudgetAppWindow(QMainWindow):
 
-    """DFY Budget App main window (GUI or view)."""
+    """
+    DFY Budget App main window.
+    Since this inheerits the QMainWindow properties, this is reserved for single page
+    representation.
+    """
 
     def __init__(self):
         super().__init__()
@@ -37,8 +41,6 @@ class BudgetAppWindow(QMainWindow):
         centralWidget = QWidget()
         self.budgetlayout = BudgetView(centralWidget)
         self.setCentralWidget(centralWidget)
-        
-        
 
     def _createStatusBar(self):
 
